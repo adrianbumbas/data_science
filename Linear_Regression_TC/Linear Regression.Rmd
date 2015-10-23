@@ -1,0 +1,55 @@
+---
+title: "Linear Regression TC"
+author: "Adrian Bumbas"
+date: "23 October 2015"
+output: html_document
+---
+###My solution fo the [Fun Series October - Learning Data Science - Linear Regression](https://www.topcoder.com/challenge-details/30051596/?type=develop) challenge
+
+
+Let's first read the CSV file into a data frame:
+
+```{r}
+df <- read.table("input/pts.csv", header=T, sep=",", quote="")
+
+```
+
+There are 3 columns:
+```{r}
+names(df)
+```
+..and 20 sets:
+```{r}
+str(factor(df$set))
+```
+Let's build the dataframe where we will store the result:
+```{r}
+result<-data.frame()
+```
+
+Next we are going to loop trough all the dataset and calculate a linear model using 'lm()'
+```{r}
+for(x in 1:20){
+  #for each set
+  set <- df[df$set == x,]
+  
+  #calculate linear model
+  lm_set<-lm(x~y,data = set)
+  
+  #add the coefficients and the datatset number to the result
+  result<-rbind(result,data.frame(x,coef(lm_set)[2],coef(lm_set)[1]))
+ 
+}
+```
+
+Finally write the data frame to a CSV file
+```{r}
+write.table(result, file = "result.csv",row.names=FALSE, na="",col.names=FALSE, sep=",")
+```
+
+Things to do:
+
+* Check RMSE
+* Check R squared
+* Optimize the model
+
